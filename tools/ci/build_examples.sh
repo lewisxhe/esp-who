@@ -81,11 +81,11 @@ else
     [ -z ${JOB_NUM} ] && die "JOB_NUM is bad"
 
     # count number of the jobs
-    NUM_OF_JOBS=$( grep -c -E "^${JOB_PATTERN}_[0-9]+:$" "${IDF_PATH}/.gitlab-ci.yml" )
+    NUM_OF_JOBS=$( grep -c -E "^${JOB_PATTERN}_[0-9]+:$" "${CI_PROJECT_DIR}/.gitlab-ci.yml" )
     [ -z ${NUM_OF_JOBS} ] && die "NUM_OF_JOBS is bad"
 
     # count number of examples
-    NUM_OF_EXAMPLES=$( find $1 -type f -name Makefile | wc -l )
+    NUM_OF_EXAMPLES=$( find ${JOB_PATH} -type f -name Makefile | wc -l )
     [ -z ${NUM_OF_EXAMPLES} ] && die "NUM_OF_EXAMPLES is bad"
 
     # separate intervals
@@ -135,7 +135,7 @@ build_example () {
 
 EXAMPLE_NUM=0
 
-find $1 -type f -name Makefile | sort | \
+find ${JOB_PATH} -type f -name Makefile | sort | \
 while read FN
 do
     if [[ $EXAMPLE_NUM -lt $START_NUM || $EXAMPLE_NUM -ge $END_NUM ]]
